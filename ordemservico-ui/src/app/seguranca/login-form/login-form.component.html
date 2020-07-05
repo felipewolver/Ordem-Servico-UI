@@ -1,0 +1,29 @@
+                             
+<div class="container" style="max-width: 400px; margin: auto;" > 
+                              <!-- {{ segurancaService.jwtPayLoad | json }} para testes -->
+    <form #loginForm="ngForm">
+        <div class="col s12">
+            <h1> Login </h1>
+
+        </div>
+
+        <div class="input-field col s6" >
+            <input type="email" name="email" #usuarioEmail ngModel email required >
+            <label for=""> Email: </label>
+
+        </div>
+
+        <div class="input-field col s6" >
+            <input type="password" name="senha" ngModel #usuarioSenha >
+            <label for=""> Senha: </label>
+
+        </div>
+
+        <div>
+            <button type="button" class="btn waves-effect waves-light btn-small"
+                (click)="login(usuarioEmail.value, usuarioSenha.value); usuarioSenha.value = ''; " [disabled]="!loginForm.valid" > Login </button>
+        </div>
+        
+    </form>
+
+</div>

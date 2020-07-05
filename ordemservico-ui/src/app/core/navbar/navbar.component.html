@@ -1,0 +1,27 @@
+<div class="red accent-1">
+
+    <div class="container">
+        
+        <div class="ui-g">
+
+            <div class="ui-g-12">  <!-- ativando a navbar pelo data-target pego pelo id="mobile-navbar" -->
+                <a data-target="mobile-navbar" href="javascript:;" class="sidenav-trigger"><i class="mat-icons-custom material-icons" >reorder </i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- navbar responsiva -->
+<ul id="mobile-navbar" class="sidenav">
+    
+    <li class="sidenav-usuario"> {{ segurancaService.jwtPayLoad?.nome }} </li>
+    <li class="sidenav-item" *ngIf="segurancaService.temPermissao('ROLE_PESQUISAR_OS')" > <a href="#" routerLink="/dashboard"  (click)="executarSidebar()" >Dashboard</a> </li> 
+    <li class="sidenav-item" *ngIf="segurancaService.temPermissao('ROLE_PESQUISAR_PESSOA')" > <a href="#" routerLink="/pessoas"  (click)="executarSidebar()" >Pessoas</a> </li> <!-- Ao clicar vai fechar a Sidebar -->
+    <li class="sidenav-item" *ngIf="segurancaService.temPermissao('ROLE_PESQUISAR_OS')" >  <a href="#" routerLink="/ordem-servicos" (click)="executarSidebar()" (click)="executarSidebar()" >Ordem de Serviço</a> </li>
+    <li class="sidenav-item" *ngIf="segurancaService.temPermissao('ROLE_PESQUISAR_OS')" > <a href="#" routerLink="/relatorios/ordem-servicos" (click)="executarSidebar()" >Relatórios</a> </li>
+    <li class="sidenav-item">  <a href="https://viacep.com.br/ws/26178350/json/?callback=?" >Sobre</a> </li>
+                                                                <!-- foi usado dois metodos no evento click colocar ponto e vígula para funcionar -->
+    <li class="sidenav-item">  <a href="javascript:;" (click)="logout(); executarSidebar();" >Sair</a> </li>
+</ul>

@@ -1,0 +1,106 @@
+<div class="container"> 
+    
+    <div class="col s12">
+        <h1> Lista de Pessoas </h1>
+    </div>
+    <div class="row">
+   
+        <form (ngSubmit)="pesquisar()">
+            
+            <div class="row">
+              
+                <div class="input-field col s8">
+                    
+                    <input type="text" name="nome" (keyup)="pesquisar()" [(ngModel)]="pessoasFilter.nome">
+                    <label for="">Nome</label>
+        
+                </div>
+                
+                <!-- Teste de verificação de email e uso da mensagem de
+                     erro e de sucesso com o data-error="" e data-success=""
+                <div class="input-field col s6">
+                    
+                    <input type="email" class="validate">
+                    <label for="">Email</label>
+                    <span class="helper-text" data-error="Email Inválido! Verificar Campo" data-success="OK!">  </span>
+                </div> -->
+            </div>
+
+            <div class="row">
+
+                <div class="col s12">
+
+                    <button type="submit" class="btn waves-effect waves-light btn-small">
+                        <i class="material-icons right">search</i> Pesquisar
+                    </button>
+                </div>
+            </div>
+        
+        </form>
+    </div>
+
+        
+    <div class="row">
+       <div class="col s12">
+             
+            <p-table [value]="pessoas" [paginator]="true" [responsive]="true" [rows]="pessoasFilter.itensPorPagina"
+                [lazy]="true" [totalRecords]="totalRegistros"  #tabela (onLazyLoad)="aoMudarPagina($event)" >
+                
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="td-cpf">CPF</th>
+                        <th class="td-nome">Nome</th>
+                        <th class="td-cpf">Telefone</th>
+                        <th class="td-estado">Estado</th>
+                        <th class="td-botoes">...</th>
+                      
+                    </tr>
+                </ng-template>
+                
+                <ng-template pTemplate="body" let-pessoa>
+                    <tr class="linha-body"> 
+                        <td >{{ pessoa.cpf }}</td>
+                        <td >{{ pessoa.nome }}</td>
+                        <td>{{ pessoa.telefone }}</td>
+                        <td>{{ pessoa.endereco.cidade.estado.nome }}</td>
+                        <td>
+                            
+                            <a class="btn waves-effect waves-light btn-medium"
+                                [routerLink]="['/pessoas', pessoa.id]" pTooltip="Editar" tooltipPosition="top">
+                                <i class="material-icons center">edit</i> 
+                            </a>
+
+                            <button class="td-botoes-margin btn waves-effect waves-light btn-medium"
+                                pTooltip="Excluir" tooltipPosition="bottom" (click)="confirmarExclusao(pessoa)" 
+                                    *ngIf="segurancaService.temPermissao('ROLE_REMOVER_PESSOA')" >
+                                <i class="material-icons center">delete_forever</i> 
+                            </button>
+    
+                        </td>
+    
+                    </tr>
+                    
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6">Nenhum Pessoa encontrada...</td> 
+                    </tr>    
+                </ng-template>   
+               
+            </p-table>
+        </div>
+    </div>
+    
+    <div class="row">
+    
+        <div class="col s3 offset-s9">
+
+        <button class="botao-margin btn waves-effect waves-light btn-small" 
+            routerLink="/pessoas/novo" >
+            <i class="material-icons right">add_circle</i> Nova Pessoa
+        </button>
+        </div>
+    </div>
+
+</div>

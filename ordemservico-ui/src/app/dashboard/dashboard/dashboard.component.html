@@ -1,0 +1,39 @@
+<div class="container" >
+    <div class="row">
+        <div class="col s12">
+            <h1> Dashboard </h1>
+        </div>
+
+        <div class="col s12 l6">
+            <p-panel header="Ordem de Serviços Lançandas por Status">
+                <p-chart type="pie" [data]="pieChartData" [options]="options" >
+
+                </p-chart>
+
+            </p-panel><br>
+
+        </div>
+
+        <div class="col s12 l6">
+            <p-panel header="Ordem de Serviços Lançandas por Status">
+                <p-chart type="line" [data]="lineChartData" [options]="options">
+
+                </p-chart>
+
+            </p-panel><br>
+
+        </div>
+
+        <div class="col s12 l12">
+            <p-panel header="Ordem de Serviços Lançandas por Status">
+                <p-chart type="bar" [data]="pieChartData" [options]="options">
+
+                </p-chart>
+
+            </p-panel>
+
+        </div>
+
+    </div>
+
+</div>

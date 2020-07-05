@@ -1,0 +1,249 @@
+<div class="container">
+    <div class="row">
+       
+        <form #formOs="ngForm" (ngSubmit)="salvar(formOs)" >
+            <div class="row">
+                
+                <div class="col s12">
+                    
+                    <h1> {{ editando ? 'Edição de' : 'Nova' }} Ordem de Serviço </h1>
+                </div>
+
+                <div class="col s6 l3">
+                        
+                    <label class="font-label"> Status: </label>
+                    <p-dropdown name="status" #status="ngModel" [(ngModel)]="ordemServico.status.id" 
+                        placeholder="Selecione..." [options]="listaStatus" 
+                        required ></p-dropdown>
+                </div>
+
+                <div class="input-field col s12 l8 offset-l4 pull-l4">
+                    
+                    <input type="text" name="equipamento" #equipamento="ngModel" [(ngModel)]="ordemServico.equipamento" 
+                        required minlength="5" maxlength="50" >
+                    <label> Equipamento </label>
+                
+                    <app-message [control]="equipamento" error="required" 
+                        text="equipamento é obrigatório!" >
+                    </app-message>
+                    <app-message [control]="equipamento" error="minlength" 
+                        text="Mínimo de {{ equipamento.errors?.minlength?.requiredLength }} caracteres!" >
+                    </app-message> 
+
+                </div>
+
+                <div class="col s6 l3">
+                        
+                    <label class="font-label"> Pessoa: </label>
+                    <p-dropdown name="pessoa" #pessoa="ngModel" [(ngModel)]="ordemServico.pessoa.id"
+                        placeholder="Selecione..." filter="true" [options]="pessoas" 
+                        required ></p-dropdown>  
+                </div>
+
+                <div class="col s6 l3">
+                        
+                    <label class="font-label"> Categoria: </label>
+                    <p-dropdown name="categoria" #categoria="ngModel" [(ngModel)]="ordemServico.categoria.id"
+                        placeholder="Selecione..." [options]="categorias"  
+                        required ></p-dropdown>
+                </div>
+
+                <div class="input-field col s12 l8 offset-l4 pull-l4">
+                    
+                    <textarea class="materialize-textarea" name="descricao" #descricao="ngModel" [(ngModel)]="ordemServico.descricao" 
+                        pTooltip="Decreva o estado físico do equipamento" tooltipPosition="top" ></textarea> 
+                    <label> Descrição </label>
+                
+                </div>
+
+                <div class="input-field col s12 l8 offset-l4 pull-l4">
+                    
+                    <input type="text" name="defeito" #defeito="ngModel" [(ngModel)]="ordemServico.defeito" required minlength="5">
+                    <label> Defeito </label>
+                
+                    <app-message [control]="defeito" error="required" 
+                        text="Campo defeito é obrigatório!" >
+                    </app-message>
+                    <app-message [control]="defeito" error="minlength" 
+                        text="Mínimo de {{ defeito.errors?.minlength?.requiredLength }} caracteres!" >
+                    </app-message> 
+
+                </div>
+
+                <div class="col s6 l3">
+                            
+                    <input type="date" name="dataRecebimento" #dataRecebimento="ngModel" [(ngModel)]="ordemServico.dataRecebimento" required>
+                    <label for="">Data de Recebimento</label>
+                    
+                    <app-message [control]="dataRecebimento" error="required"
+                        text="Data de Recebimento é obrigatorio!" >
+
+                    </app-message>
+                     
+                </div>
+                
+                <div class="col s6 l3 offset-l6 pull-l6">
+                    
+                    <input type="date" #dataEntrega="ngModel" [(ngModel)]="ordemServico.dataEntrega" name="dataEntrega"  >
+                    <label for="">Data de Entrega</label>
+                </div>
+
+                <div class="input-field col s6 l2 offset-l4 pull-l4">
+                    
+                    <input type="text" id="valor" name="valor" #valor="ngModel" [(ngModel)]="ordemServico.valor" pTooltip="Valor do conserto" tooltipPosition="top"
+                       currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: false }" readonly>
+                    <label> Valor </label>
+                
+                </div>
+
+                <div class="input-field col s12 l8 offset-l4 pull-l4">
+                    
+                    <textarea name="laudo" #laudo="ngModel" [(ngModel)]="ordemServico.laudoTecnico" class="materialize-textarea" ></textarea>
+                    <label> Laudo técnico </label>
+
+                </div>
+
+                <div class="input-field col s6 l2 offset-l4 pull-l4">
+                    
+                    <input type="text" name="garantia" #garantia="ngModel" [(ngModel)]="ordemServico.garantia" >
+                    <label> Garantia </label>
+
+                </div>
+
+            </div>  
+            
+           
+            <div class="row" >
+                              
+                <div class="col s12" style="margin-bottom: 10px;">
+
+                     <!-- Inicio da parte cadastro de Serviços -->
+                    <p-panel header="Serviços" >
+                        <div class="col s12">
+                            <button type="button" class="botao-margin-servicos btn waves-effect waves-light btn-small"
+                                (click)="prepararNovoServico()" onclick="limpar()" >
+                                <i class="material-icons right">add_circle</i> novo
+                            </button>
+                        
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col s12">
+                                <p-table [value]="ordemServico.servicos" [responsive]="true" >
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="td-nome-os">Descrição</th>
+                                            <th class="td-status-os">Valor</th>
+                                            <th class="td-botoes-os" ></th>
+                        
+                                        </tr>
+                        
+                                    </ng-template>
+                        
+                                    <ng-template pTemplate="body" let-servico let-rowIndex="rowIndex">
+                                        <tr class="linha-body">
+                                            <td>{{ servico.descricao }}</td>
+                                            <td>{{ servico.valor | currency:'BRL' }}</td>
+                                            <td>   
+                                                <a class="btn waves-effect waves-light btn-medium"
+                                                    pTooltip="Editar" tooltipPosition="top" (click)="prepararEdicaoServico(servico, rowIndex)" onclick="limpar()" > 
+                                                    <i class="material-icons center">edit</i> 
+                                                </a>
+                        
+                                                <button class="td-botoes-margin btn waves-effect waves-light btn-medium"
+                                                    pTooltip="Excluir" tooltipPosition="bottom" (click)="removerServico(rowIndex)" onclick="limpar()">
+                                                    <i class="material-icons center">delete_forever</i> 
+                                                </button>
+                        
+                                            </td>
+                        
+                                        </tr>
+                        
+                                    </ng-template>
+                        
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="3">Nenhuma Serviço encontrado...</td> 
+                                        </tr>    
+                                    </ng-template>   
+                        
+                                </p-table>
+                        
+                            </div>
+                        </div>
+                        
+                        <p-dialog [header]="editandoServico ? 'Editar Serviço' : 'Novo Serviço' " [(visible)]="exibindoFormularioServico" 
+                            modal="modal" *ngIf="servico">
+                        
+                            <form #formServico="ngForm" (ngSubmit)="confirmarServico(formServico);" >
+                                <div class="input-field col s12">
+                                    <input type="text" name="descricao" #descricao="ngModel" 
+                                        [(ngModel)]="servico.descricao" required minlength="5">
+                                    <label> Descrição </label>
+                        
+                                    <app-message [control]="descricao" error="required" text="Informe uma descrição do serviço">
+                        
+                                    </app-message>
+                        
+                                    <app-message [control]="descricao" error="minlength" 
+                                        text="Mínimo de {{ descricao.errors?.minlength?.requiredLength }} caracteres!" >
+                        
+                                    </app-message>
+                        
+                                </div>
+                        
+                                <div class="input-field col s4">
+                                    <input type="text" name="valor" #valor="ngModel" [(ngModel)]="servico.valor" 
+                                        currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: false }" required >
+                                    <label> Valor </label>
+                        
+                                    <app-message [control]="valor" error="required" text="Informe o valor do serviço.">
+                        
+                                    </app-message>
+                        
+                                </div>
+                        
+                                <div class="col s12">
+                                    <button type="submit" class="btn waves-effect waves-light btn-small" [disabled]="!formServico.valid">
+                                        <i class="material-icons right">send</i> {{ editandoServico ? 'Alterar' : 'Adicionar' }} 
+                                    </button>
+                        
+                                </div>
+                        
+                            </form>
+                        
+                        </p-dialog>
+                        
+                    
+                    </p-panel>
+
+                </div>
+                <!-- Fim da parte cadastro de Serviços -->
+
+                <div class="col s4 l2" >
+                    
+                    <button type="button" (click)="novo(formOs)" class="btn waves-effect waves-light btn-small" >
+                         <i class="material-icons right">person_add</i> Nova OS </button>
+                </div>
+
+                <div class="col s4 l2">
+
+                    <button type="submit" [disabled]="!formOs.valid" class="btn waves-effect waves-light btn-small">
+                        <i class="material-icons right">send</i> Salvar 
+                    </button>
+                </div>
+
+                <div class="col s4 l2 offset-l2">
+
+                    <a routerLink="/ordem-servicos" class="botao-margin-voltar btn waves-effect waves-light btn-small">
+                        <i class="material-icons right">subdirectory_arrow_left</i> Voltar
+                    </a>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

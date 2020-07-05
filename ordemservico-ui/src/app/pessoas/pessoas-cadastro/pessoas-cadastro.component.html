@@ -1,0 +1,154 @@
+<div class="container">
+    <div class="row">
+        <form id="formPessoa" #formPessoa="ngForm" (ngSubmit)="salvar(formPessoa)">
+
+            <div class="row">
+
+                <div class="col s12">
+
+                    <h1> {{ editando ? 'Edição de' : 'Nova' }} Pessoa </h1>
+                </div>
+
+                <div class="input-field col s12 l8 offset-l4 pull-l4 ">
+
+                    <input type="text" name="nome" #nome="ngModel" required minlength="4"
+                        [(ngModel)]="pessoa.nome" >
+                    <label> Nome </label>
+                    
+                    <app-message [control]="nome" error="required" 
+                        text="Nome é obrigatório!" >
+                    </app-message>
+                    <app-message [control]="nome" error="minlength" 
+                        text="Mínimo de {{ nome.errors?.minlength?.requiredLength }} caracteres!" >
+                    </app-message>
+                
+                </div>
+                
+                <div class="input-field col s6 l3">
+
+                    <input type="text" name="cpf" id="cpf" #cpf="ngModel" [(ngModel)]="pessoa.cpf" 
+                        maxlength="14" onKeyPress="criarMascara('###.###.###-##', this)"> <!-- Evento OnKeyPress="criarMascara('###.###.###-##', this)" de JAVASCRIPT -->
+                    <label> CPF </label>
+                
+                   <!-- <app-message [control]="cpf" error="required" 
+                        text="CPF Obrigatório!" >
+                    </app-message>
+                    <app-message [control]="cpf" error="minlength" 
+                        text="Digite somente números" >
+                    </app-message> 
+                    <app-message id="message-erro" [control]="cpf"> 
+                         Mensagem de erro vindo do javascript através do indentificador message-erro
+                    </app-message> -->
+                 
+                </div>
+             
+                <div class="input-field col s6 l3 offset-l6 pull-l6">
+
+                    <input type="text" name="telefone" #telefone="ngModel" required maxlength="13"
+                        minlength="12" [(ngModel)]="pessoa.telefone"  OnKeyPress="criarMascara('(##)#########', this)"> <!-- Evento de JAVASCRIPT -->
+                    <label> Telefone </label>
+
+                    <app-message [control]="telefone" error="required" 
+                        text="Telefone é obrigatório! Ex: DDD99999-9999" >
+                    </app-message>
+
+                    <app-message [control]="telefone" error="minlength" 
+                        text="Ex: DDD99999-9999" >
+                    </app-message>
+                </div>
+
+                <div class="input-field col s6 l3 offset-l5 pull-l5">
+
+                    <input type="text" name="cep" #cep="ngModel" id="cep" 
+                        maxlength="9" [(ngModel)]="pessoa.endereco.cep" OnKeyPress="criarMascara('#####-###', this)">
+                    <label> CEP </label>
+
+                    <!--<app-message [control]="cep" error="required" 
+                        text="CEP é obrigatório!" >
+                    </app-message> -->
+                    <app-message id="errorCep" [control]="cep" >
+                    
+                    </app-message>
+
+                </div>
+
+                <div class="input-field col s12 l8">
+
+                    <input type="text" name="logradouro" id="rua" #logradouro="ngModel" 
+                        [(ngModel)]="pessoa.endereco.logradouro" >
+                    <label class="margin-label-endereco"> Endereço </label>
+                </div>
+
+                <div class="input-field col s4 ">
+
+                    <input type="text" name="numero" #numero="ngModel" [(ngModel)]="pessoa.endereco.numero" >
+                    <label> Número </label>
+                </div>
+                
+                <div class="input-field col s4">
+
+                    <input type="text" name="complemento" #complemento="ngModel" [(ngModel)]="pessoa.endereco.complemento" >
+                    <label> Complemento </label>
+                </div>   
+                
+                <div class="input-field col s8 l4 offset-l4 pull-l4">
+
+                    <input type="text" name="bairro" id="bairro" #bairro="ngModel" 
+                        [(ngModel)]="pessoa.endereco.bairro">
+                    <label> Bairro </label>
+                </div>
+                
+                <div class="row">
+                    <div class="col s8 l4 margin-estado">
+                        
+                        <label class="font-label"> Estado: </label>
+                        <p-dropdown  name="estadoSelecionado" #estado="ngModel" [(ngModel)]="estadoSelecionado"
+                            placeholder="Selecione..." [options]="estados"  filter="true" 
+                            (onChange)="carregarCidades()"  required ></p-dropdown>
+                        
+                        <app-message [control]="estado" error="required"
+                            text="Informe um Estado">
+                        </app-message>
+                    
+                    </div>
+
+                    <div class="col s8 l4">
+                        
+                        <label class="font-label"> Cidade: </label>
+                        <p-dropdown name="cidade" #cidade="ngModel" [(ngModel)]="pessoa.endereco.cidade.id" 
+                            placeholder="Selecione..." filter="true" [options]="cidades"  
+                            [disabled]="!estadoSelecionado" required ></p-dropdown>
+                    </div>
+               </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col s4 l2">
+                    
+                    <button type="button" (click)="novo(formPessoa)" class="btn waves-effect waves-light btn-small" >
+                         <i class="material-icons right">person_add</i> Novo </button>
+                </div>
+
+                <div class="col s4 l2">
+
+                    <button type="submit" [disabled]="!formPessoa.valid" class="botao-margin-salvar btn waves-effect waves-light btn-small">
+                        <i class="material-icons right">send</i> Salvar
+                    </button>
+                </div>
+
+                <div class="col s4 l2 offset-l6">
+
+                    <a routerLink="/pessoas" class="botao-margin-voltar btn waves-effect waves-light btn-small">
+                        <i class="material-icons right">subdirectory_arrow_left</i> Voltar
+                    </a>
+                </div>
+
+            </div>
+        
+        </form>
+    
+    </div>
+
+</div>

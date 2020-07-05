@@ -1,0 +1,120 @@
+<div class="container">
+    
+    <div class="col s12">
+        <h1> Ordem de Serviços </h1>
+    </div>
+
+    <div class="row">
+
+        <form (submit)="pesquisar()"  >
+            
+            <div class="row">
+
+                <div class="col input-field s12 l6 offset-l6 pull-l6">
+                            
+                    <input type="text" name="equipamento" [(ngModel)]="osFilter.equipamento" (keyup)="pesquisar()" >
+                    <label for="">Equipamento</label>
+                </div>
+
+                <div class="col s6 l3">
+                            
+                    <input type="date" name="dataRecebimentoInicio" [(ngModel)]="osFilter.dataRecebimentoInicio" >
+                    <label for="">Recebimento de</label>
+                </div>
+                
+                <div class="col s6 l3 offset-l6 pull-l6">
+                    
+                    <input type="date" name="dataRecebimentoFim" [(ngModel)]="osFilter.dataRecebimentoFim" >
+                    <label for="">Até</label>
+                </div>
+            
+            </div>
+
+            <div class="row">
+
+                <div class="col s12">
+
+                    <button type="submit" class="btn waves-effect waves-light btn-small">
+                        <i class="material-icons right">search</i> Pesquisar
+                    </button>
+                </div>
+            </div>
+        
+        </form>
+    
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+                
+                <p-table [value]="ordemServicos" [paginator]="true" [responsive]="true" [rows]="osFilter.itensPorPagina" 
+                    [lazy]="true" [totalRecords]="totalRegistros" #tabela (onLazyLoad)="aoMudarPagina($event)" 
+                     [resizableColumns]="true" columnResizeMode="expand" > 
+                    
+                    <ng-template  pTemplate="header">
+                        <tr>
+                            <th class="td-num-os">Num. OS</th>
+                            <th class="td-nome-os" >Pessoa</th>
+                            <th class="td-nome-os">Equipamento</th>
+                            <th class="td-categoria-os">Categoria</th>
+                            <th class="td-status-os">Status</th>
+                            <th class="td-status-os">Data de Recebimento</th>
+                            <th class="td-status-os">Data de Entrega</th>
+                            <th class="td-status-os">Valor</th>
+                            <th class="td-botoes-os"></th>
+                        
+                        </tr>
+                    </ng-template>
+                    
+                    <ng-template pTemplate="body" let-os >
+                        <tr class="linha-body"> 
+                            <td >{{ os.os }}</td>
+                            <td >{{ os.pessoa.nome }}</td>
+                            <td >{{ os.equipamento }}</td>
+                            <td>{{ os.categoria.nome }}</td>
+                            <td>{{ os.status.descricao }}</td>
+                            <td>{{ os.dataRecebimento | date: "dd/MM/y" }}</td>
+                            <td>{{ os.dataEntrega | date: "dd/MM/y" }}</td>
+                            <td>{{ os.valor | currency:'BRL' }}</td>
+                            <td>
+                                
+                                <a class="btn waves-effect waves-light btn-medium"
+                                     pTooltip="Editar" tooltipPosition="top" [routerLink]="['/ordem-servicos', os.os]"> 
+                                    <i class="material-icons center">edit</i> 
+                                </a>
+    
+                                <button class="td-botoes-margin btn waves-effect waves-light btn-medium"
+                                    pTooltip="Excluir" tooltipPosition="bottom" (click)="confirmarExclusao(os)" 
+                                    *ngIf="segurancaService.temPermissao('ROLE_REMOVER_OS')" >
+                                    <i class="material-icons center">delete_forever</i> 
+                                </button>
+        
+                            </td>
+        
+                        </tr>
+                        
+                    </ng-template>
+    
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="7">Nenhuma Ordem de Serviço encontrada...</td> 
+                        </tr>    
+                    </ng-template>   
+                
+            </p-table>
+        </div>
+    </div>
+
+        
+    <div class="row">
+        
+        <div class="col s5 offset-s7 offset-l10 ">
+    
+        <button class="botao-margin-os btn waves-effect waves-light btn-small" 
+            routerLink="/ordem-servicos/novo" >
+            <i class="material-icons right">add_circle</i> Nova OS
+        </button>
+        </div>
+    </div>
+
+</div>

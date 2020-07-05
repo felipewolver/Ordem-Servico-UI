@@ -1,0 +1,16 @@
+
+
+.row div > a{
+    width: 190px;
+    margin-left: 35px;
+    height: 40px;
+  
+}
+
+.row div a > i{
+   color: black;
+   font-size: x-large;
+   padding-top: 1px;
+   
+}
+
